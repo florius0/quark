@@ -29,7 +29,7 @@ defmodule Quark.Pointfree do
   defmacro defx(head, do: body) do
     {fun_name, ctx, _} = head
 
-    quote do
+    quote generated: true do
       def unquote({fun_name, ctx, [{:subject, [], Elixir}]}) do
         unquote({:subject, [], Elixir}) |> unquote(body)
       end
@@ -50,7 +50,7 @@ defmodule Quark.Pointfree do
   defmacro defxp(head, do: body) do
     {fun_name, ctx, []} = head
 
-    quote do
+    quote generated: true do
       defp unquote({fun_name, ctx, [{:subject, [], Elixir}]}) do
         unquote({:subject, [], Elixir}) |> unquote(body)
       end
