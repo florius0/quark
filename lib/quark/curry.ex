@@ -77,7 +77,7 @@ defmodule Quark.Curry do
   defmacro defcurry(head, do: body) do
     {fun_name, ctx, args} = head
 
-    quote do
+    quote generated: true do
       def unquote({fun_name, ctx, []}), do: unquote(wrap(args, body))
     end
   end
@@ -86,13 +86,13 @@ defmodule Quark.Curry do
   defmacro defcurryp(head, do: body) do
     {fun_name, ctx, args} = head
 
-    quote do
+    quote generated: true do
       defp unquote({fun_name, ctx, []}), do: unquote(wrap(args, body))
     end
   end
 
   defp wrap([arg|args], body) do
-    quote do
+    quote generated: true do
       fn unquote(arg) ->
         unquote(wrap(args, body))
       end

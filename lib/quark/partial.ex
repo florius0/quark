@@ -53,14 +53,14 @@ defmodule Quark.Partial do
   defmacro defpartial({fun_name, ctx, args}, do: body), do: defpartial_quote({fun_name, ctx, args}, do: body)
 
   defp defpartial_quote({fun_name, ctx, args}, do: body) do
-    quote do
+    quote generated: true do
       defcurry unquote({fun_name, ctx, args}), do: unquote(body)
       unquote do: Enum.map(args_scan(args), &rehydrate(fun_name, ctx, &1))
     end
   end
 
   defp rehydrate(fun_name, ctx, args) do
-    quote do
+    quote generated: true do
       def unquote({fun_name, ctx, args}) do
         unquote(partial_apply(fun_name, args))
       end
@@ -71,14 +71,14 @@ defmodule Quark.Partial do
   `defpartial/2`, but generates private functions.
   """
   defmacro defpartialp({fun_name, ctx, args}, do: body) do
-    quote do
+    quote generated: true do
       defcurryp unquote({fun_name, ctx, args}), do: unquote(body)
       unquote do: Enum.map(args_scan(args), &rehydratep(fun_name, ctx, &1))
     end
   end
 
   defp rehydratep(fun_name, ctx, args) do
-    quote do
+    quote generated: true do
       defp unquote({fun_name, ctx, args}) do
         unquote(partial_apply(fun_name, args))
       end
@@ -89,7 +89,7 @@ defmodule Quark.Partial do
 
   defp partial_apply(fun_name, args) do
     {as, [a]} = Enum.split(args, -1)
-    quote do
+    quote generated: true do
       unquote(fun_name)(unquote_splicing(as)).(unquote(a))
     end
   end
